@@ -445,6 +445,7 @@ private fun EpgRow(vm: MainViewModel, c: Channel, list: List<Channel>, ver: Int,
             val until = now + 3 * 60 * 60_000L
             val window = (until - from).toFloat()
             val schedule = remember(c, ver) { EpgStore.schedule(c, from, until) }
+            val timelineWidth = maxWidth
             if (schedule.isEmpty()) {
                 Text("Sin información de programación", color = OttText.copy(alpha = .6f), fontSize = 13.sp, modifier = Modifier.align(Alignment.Center))
             } else {
@@ -454,7 +455,7 @@ private fun EpgRow(vm: MainViewModel, c: Channel, list: List<Channel>, ver: Int,
                         val clippedStart = maxOf(p.start, from)
                         val clippedStop = minOf(stop, until)
                         val fraction = ((clippedStop - clippedStart).coerceAtLeast(1L) / window).coerceIn(.08f, 1f)
-                        val cardWidth = maxWidth * fraction
+                        val cardWidth = timelineWidth * fraction
                         val current = now >= p.start && now < stop
                         Column(
                             Modifier.width(cardWidth).fillMaxHeight().clip(RoundedCornerShape(9.dp))
